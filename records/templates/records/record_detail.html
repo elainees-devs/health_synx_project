@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Medical Record Details{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4>Medical Record: {{ record.patient.get_full_name }}</h4>
+        </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Patient:</strong> {{ record.patient.get_full_name }}</li>
+                <li class="list-group-item"><strong>Doctor:</strong> {{ record.doctor.full_name }}</li>
+                <li class="list-group-item"><strong>Diagnosis:</strong> {{ record.diagnosis }}</li>
+                <li class="list-group-item"><strong>Notes:</strong> {{ record.notes|default:"N/A" }}</li>
+                <li class="list-group-item"><strong>Date:</strong> {{ record.date|date:"F j, Y" }}</li>
+                <li class="list-group-item"><strong>Created At:</strong> {{ record.created_at|date:"F j, Y, g:i a" }}</li>
+                <li class="list-group-item"><strong>Updated At:</strong> {{ record.updated_at|date:"F j, Y, g:i a" }}</li>
+            </ul>
+            <div class="mt-4">
+                <a href="{% url 'record-update' record.id %}" class="btn btn-warning">Edit</a>
+                <a href="{% url 'record-delete' record.id %}" class="btn btn-danger">Delete</a>
+                <a href="{% url 'record-list' %}" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
