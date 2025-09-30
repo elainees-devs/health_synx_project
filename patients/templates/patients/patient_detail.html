@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Details{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4>Patient Details: {{ patient.username }}</h4>
+        </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Full Name:</strong> {{ patient.get_full_name }}</li>
+                <li class="list-group-item"><strong>Username:</strong> {{ patient.username }}</li>
+                <li class="list-group-item"><strong>Email:</strong> {{ patient.email }}</li>
+                <li class="list-group-item"><strong>Phone Number:</strong> {{ patient.phone_number|default:"N/A" }}</li>
+                <li class="list-group-item"><strong>Date of Birth:</strong> {{ patient.date_of_birth|date:"F j, Y"|default:"N/A" }}</li>
+                <li class="list-group-item"><strong>Role:</strong> {{ patient.role|title }}</li>
