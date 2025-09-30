@@ -1,0 +1,17 @@
+<!-- appointments/templates/appointments/appointment_confirm_delete.html -->
+{% extends "base.html" %}
+
+{% block title %}Delete Appointment{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Delete Appointment</h2>
+    <p>Are you sure you want to delete the appointment of <strong>{{ appointment.patient.full_name }}</strong> with <strong>{{ appointment.doctor.full_name }}</strong> on <strong>{{ appointment.date }}</strong> at <strong>{{ appointment.time }}</strong>?</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <a href="{% url 'appointment_list' %}" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+</div>
+{% endblock %}
