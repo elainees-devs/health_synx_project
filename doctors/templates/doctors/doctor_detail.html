@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Doctor Details{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4>Doctor Details: {{ doctor.full_name }}</h4>
+        </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>User:</strong> {{ doctor.user.username }}</li>
+                <li class="list-group-item"><strong>Full Name:</strong> {{ doctor.full_name }}</li>
+                <li class="list-group-item"><strong>Specialization:</strong> {{ doctor.specialization }}</li>
+                <li class="list-group-item"><strong>Contact:</strong> {{ doctor.contact|default:"N/A" }}</li>
+                <li class="list-group-item"><strong>Created At:</strong> {{ doctor.created_at|date:"F j, Y, g:i a" }}</li>
+                <li class="list-group-item"><strong>Updated At:</strong> {{ doctor.updated_at|date:"F j, Y, g:i a" }}</li>
+            </ul>
+
+            <div class="mt-4">
+                <a href="{% url 'doctor-update' doctor.id %}" class="btn btn-warning">Edit</a>
+                <a href="{% url 'doctor-delete' doctor.id %}" class="btn btn-danger">Delete</a>
+                <a href="{% url 'doctor-list' %}" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
