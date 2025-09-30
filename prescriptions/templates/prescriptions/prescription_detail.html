@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Prescription Details{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Prescription Details</h2>
+    
+    <table class="table table-bordered mt-3">
+        <tr>
+            <th>Record ID</th>
+            <td>{{ prescription.record.id }}</td>
+        </tr>
+        <tr>
+            <th>Medicine Name</th>
+            <td>{{ prescription.medicine_name }}</td>
+        </tr>
+        <tr>
+            <th>Dosage</th>
+            <td>{{ prescription.dosage }}</td>
+        </tr>
+        <tr>
+            <th>Duration</th>
+            <td>{{ prescription.duration }}</td>
+        </tr>
+    </table>
+    
+    <a href="{% url 'prescription_update' prescription.pk %}" class="btn btn-primary">Edit</a>
+    <a href="{% url 'prescription_delete' prescription.pk %}" class="btn btn-danger">Delete</a>
+    <a href="{% url 'prescription_list' %}" class="btn btn-secondary">Back to List</a>
+</div>
+{% endblock %}
