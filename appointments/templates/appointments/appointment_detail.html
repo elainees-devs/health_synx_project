@@ -1,0 +1,41 @@
+<!-- appointments/templates/appointments/appointment_detail.html -->
+{% extends "base.html" %}
+
+{% block title %}Appointment Details{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Appointment Details</h2>
+
+    <table class="table table-bordered mt-3">
+        <tr>
+            <th>Patient</th>
+            <td>{{ appointment.patient.full_name }}</td>
+        </tr>
+        <tr>
+            <th>Doctor</th>
+            <td>{{ appointment.doctor.full_name if appointment.doctor else "N/A" }}</td>
+        </tr>
+        <tr>
+            <th>Date</th>
+            <td>{{ appointment.date }}</td>
+        </tr>
+        <tr>
+            <th>Time</th>
+            <td>{{ appointment.time }}</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td>{{ appointment.status }}</td>
+        </tr>
+        <tr>
+            <th>Created At</th>
+            <td>{{ appointment.created_at }}</td>
+        </tr>
+    </table>
+
+    <a href="{% url 'appointment_update' appointment.pk %}" class="btn btn-primary">Edit</a>
+    <a href="{% url 'appointment_delete' appointment.pk %}" class="btn btn-danger">Delete</a>
+    <a href="{% url 'appointment_list' %}" class="btn btn-secondary">Back to List</a>
+</div>
+{% endblock %}
