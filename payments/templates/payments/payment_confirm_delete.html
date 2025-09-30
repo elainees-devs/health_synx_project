@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Payment{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-danger text-white">
+            <h4>Confirm Deletion</h4>
+        </div>
+        <div class="card-body">
+            <p>Are you sure you want to delete the payment of <strong>{{ payment.amount }}</strong> for patient <strong>{{ payment.patient.username }}</strong>?</p>
+            <p>This action <strong>cannot</strong> be undone.</p>
+            <form method="post">
+                {% csrf_token %}
+                <a href="{% url 'payment-list' %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

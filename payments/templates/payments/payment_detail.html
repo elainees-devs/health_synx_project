@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Payment Details{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4>Payment Details</h4>
+        </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Patient:</strong> {{ payment.patient.username }}</li>
+                <li class="list-group-item"><strong>Amount:</strong> {{ payment.amount }}</li>
+                <li class="list-group-item"><strong>Payment Method:</strong> {{ payment.payment_method }}</li>
+                <li class="list-group-item"><strong>Status:</strong> {{ payment.status }}</li>
+                <li class="list-group-item"><strong>Description:</strong> {{ payment.description|default:"-" }}</li>
+                <li class="list-group-item"><strong>Date:</strong> {{ payment.created_at|date:"F j, Y, g:i a" }}</li>
+            </ul>
+            <div class="mt-3">
+                <a href="{% url 'payment-update' payment.id %}" class="btn btn-warning">Edit</a>
+                <a href="{% url 'payment-delete' payment.id %}" class="btn btn-danger">Delete</a>
+                <a href="{% url 'payment-list' %}" class="btn btn-secondary">Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
