@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Prescriptions{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Prescriptions</h2>
+        <a href="{% url 'prescription_create' %}" class="btn btn-success">Add Prescription</a>
+    </div>
+
+    {% if prescriptions %}
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Record ID</th>
+                    <th>Medicine Name</th>
+                    <th>Dosage</th>
+                    <th>Duration</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prescription in prescriptions %}
+                <tr>
+                    <td>{{ prescription.record.id }}</td>
+                    <td>{{ prescription.medicine_name }}</td>
+                    <td>{{ prescription.dosage }}</td>
+                    <td>{{ prescription.duration }}</td>
+                    <td>
+                        <a href="{% url 'prescription_detail' prescription.pk %}" class="btn btn-info btn-sm">View</a>
+                        <a href="{% url 'prescription_update' prescription.pk %}" class="btn btn-primary btn-sm">Edit</a>
+                        <a href="{% url 'prescription_delete' prescription.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No prescriptions available.</p>
+    {% endif %}
+</div>
+{% endblock %}
