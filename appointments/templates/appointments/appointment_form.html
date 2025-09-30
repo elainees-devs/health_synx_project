@@ -1,0 +1,48 @@
+<!-- appointments/templates/appointments/appointment_form.html -->
+{% extends "base.html" %}
+
+{% block title %}{{ form.instance.pk|yesno:"Edit Appointment,Create Appointment" }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>{{ form.instance.pk|yesno:"Edit Appointment,Create Appointment" }}</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        
+        <div class="mb-3">
+            <label for="id_patient" class="form-label">Patient</label>
+            {{ form.patient }}
+            {{ form.patient.errors }}
+        </div>
+        
+        <div class="mb-3">
+            <label for="id_doctor" class="form-label">Doctor</label>
+            {{ form.doctor }}
+            {{ form.doctor.errors }}
+        </div>
+        
+        <div class="mb-3">
+            <label for="id_date" class="form-label">Date</label>
+            {{ form.date }}
+            {{ form.date.errors }}
+        </div>
+        
+        <div class="mb-3">
+            <label for="id_time" class="form-label">Time</label>
+            {{ form.time }}
+            {{ form.time.errors }}
+        </div>
+        
+        <div class="mb-3">
+            <label for="id_status" class="form-label">Status</label>
+            {{ form.status }}
+            {{ form.status.errors }}
+        </div>
+        
+        <button type="submit" class="btn btn-success">Save</button>
+        <a href="{% url 'appointment_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
