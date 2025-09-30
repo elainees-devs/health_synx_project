@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}{{ form.instance.pk|yesno:"Edit Prescription,Create Prescription" }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>{{ form.instance.pk|yesno:"Edit Prescription,Create Prescription" }}</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        
+        <div class="mb-3">
+            <label for="id_record" class="form-label">Medical Record</label>
+            {{ form.record }}
+            {{ form.record.errors }}
+        </div>
+        
+        <div class="mb-3">
+            <label for="id_medicine_name" class="form-label">Medicine Name</label>
+            {{ form.medicine_name }}
+            {{ form.medicine_name.errors }}
+        </div>
+        
+        <div class="mb-3">
+            <label for="id_dosage" class="form-label">Dosage</label>
+            {{ form.dosage }}
+            {{ form.dosage.errors }}
+        </div>
+        
+        <div class="mb-3">
+            <label for="id_duration" class="form-label">Duration</label>
+            {{ form.duration }}
+            {{ form.duration.errors }}
+        </div>
+        
+        <button type="submit" class="btn btn-success">Save</button>
+        <a href="{% url 'prescription_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
