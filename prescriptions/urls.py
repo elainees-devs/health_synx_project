@@ -1,11 +1,16 @@
-# prescriptions/urls.py
 from django.urls import path
-from . import views
+from .views import (
+    PrescriptionListView,
+    PrescriptionDetailView,
+    PrescriptionCreateView,
+    PrescriptionUpdateView,
+    PrescriptionDeleteView
+)
 
 urlpatterns = [
-    path('', views.prescription_list, name='prescription_list'),                # List all prescriptions
-    path('create/', views.prescription_create, name='prescription_create'),     # Create a new prescription
-    path('<int:pk>/', views.prescription_detail, name='prescription_detail'),   # View prescription details
-    path('<int:pk>/update/', views.prescription_update, name='prescription_update'), # Update prescription
-    path('<int:pk>/delete/', views.prescription_delete, name='prescription_delete'), # Delete prescription
+    path('', PrescriptionListView.as_view(), name='prescription-list'),
+    path('create/', PrescriptionCreateView.as_view(), name='prescription-create'),
+    path('<int:pk>/', PrescriptionDetailView.as_view(), name='prescription-detail'),
+    path('<int:pk>/update/', PrescriptionUpdateView.as_view(), name='prescription-update'),
+    path('<int:pk>/delete/', PrescriptionDeleteView.as_view(), name='prescription-delete'),
 ]
