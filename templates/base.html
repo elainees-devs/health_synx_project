@@ -1,10 +1,10 @@
-{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Health Synx</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>{% block title %}HealthSynx{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
     {% block content %}
