@@ -19,9 +19,9 @@
                 <li class="list-group-item"><strong>Updated At:</strong> {{ record.updated_at|date:"F j, Y, g:i a" }}</li>
             </ul>
             <div class="mt-4">
-                <a href="{% url 'record-update' record.id %}" class="btn btn-warning">Edit</a>
-                <a href="{% url 'record-delete' record.id %}" class="btn btn-danger">Delete</a>
-                <a href="{% url 'record-list' %}" class="btn btn-secondary">Back to List</a>
+                <a href="{% url 'record_update' record.id %}" class="btn btn-warning">Edit</a>
+                <a href="{% url 'record_delete' record.id %}" class="btn btn-danger">Delete</a>
+                <a href="{% url 'record_list' %}" class="btn btn-secondary">Back to List</a>
             </div>
         </div>
     </div>
