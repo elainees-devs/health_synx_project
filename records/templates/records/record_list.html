@@ -31,9 +31,9 @@
                             <td>{{ record.diagnosis|truncatewords:10 }}</td>
                             <td>{{ record.date|date:"F j, Y" }}</td>
                             <td>
-                                <a href="{% url 'record-detail' record.id %}" class="btn btn-info btn-sm">View</a>
-                                <a href="{% url 'record-update' record.id %}" class="btn btn-warning btn-sm">Edit</a>
-                                <a href="{% url 'record-delete' record.id %}" class="btn btn-danger btn-sm">Delete</a>
+                                <a href="{% url 'record_detail' record.id %}" class="btn btn-info btn-sm">View</a>
+                                <a href="{% url 'record_update' record.id %}" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="{% url 'record_delete' record.id %}" class="btn btn-danger btn-sm">Delete</a>
                             </td>
                         </tr>
                     {% endfor %}
