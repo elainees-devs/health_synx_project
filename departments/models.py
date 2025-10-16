@@ -10,6 +10,7 @@ class Department(models.Model):
     def __str__(self):
         return self.name
     
+    
 class DepartmentStaff(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     staff = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={
@@ -18,3 +19,9 @@ class DepartmentStaff(models.Model):
 
     def __str__(self):
         return f"{self.staff.get_full_name()} ({self.department.name})"
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['department']),
+            models.Index(fields=['staff']),
+        ]
