@@ -36,18 +36,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
     'users',
     'doctors',
     'appointments',
     'patients',
-    'medical_records',
     'notifications',
     'hospital_admins',
     'billing',
     'diagnostics',
     'pharmacy',
     'nurses',
+    'departments',
 
 ]
 
@@ -66,7 +65,7 @@ ROOT_URLCONF = 'health_synx.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -136,7 +135,8 @@ USE_I18N = True
 USE_TZ = True
 
 # Default redirect after login if no next parameter is provided
-LOGIN_REDIRECT_URL = '/redirect-after-login/'  
+LOGIN_REDIRECT_URL = '/redirect-after-login/'   
+LOGOUT_REDIRECT_URL = '/login/'
 
 # URL for login page
 LOGIN_URL = '/login/'  
