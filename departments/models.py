@@ -14,7 +14,7 @@ class Department(models.Model):
 class DepartmentStaff(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     staff = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={
-        'role__in': ['doctor', 'lab_tech', 'imaging_tech', 'pharmacist', 'nurse']
+        'role__in': ['doctor', 'lab_tech', 'imaging_tech', 'pharmacist', 'nurse', 'hospital_admin']
     })
 
     def __str__(self):
