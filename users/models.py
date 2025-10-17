@@ -2,6 +2,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+
 class User(AbstractUser):
     ROLE_CHOICES = [
         ('admin', 'Admin'),
@@ -14,12 +15,24 @@ class User(AbstractUser):
         ('nurse', 'Nurse'),
         ('hospital_admin', 'Hospital Admin'),
     ]
+
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
 
+    # Avoid circular import by using string reference
+    department = models.ForeignKey(
+        'departments.Department',   
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="users"
+    )
+
     def __str__(self):
-        return f"{self.username} ({self.role})"
-    
+        dept_info = f" - {self.department.name}" if self.department else ""
+        return f"{self.username} ({self.role}){dept_info}"
+
     class Meta:
         indexes = [
-            models.Index(fields=['role']),  # Index on role for faster lookups
+            models.Index(fields=['role']),
         ]
