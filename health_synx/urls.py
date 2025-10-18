@@ -17,4 +17,9 @@ urlpatterns = [
     path('redirect-after-login/', user_views.redirect_after_login, name='redirect_after_login'),  
     path('departments/', include('departments.urls')),
     path('users/', include('users.urls')),
+    path('nurses/', include('nurses.urls')),
+    path('doctors/', include('doctors.urls')),
+    path('patients/', include('patients.urls')),
+    path('appointments/', include('appointments.urls')),
+    path('billing/', include('billing.urls')),
 ]
