@@ -8,13 +8,13 @@ from .forms import DepartmentForm
 from users.decorators import role_required
 
 @login_required
-@role_required(['admin'])
+@role_required(['admin', 'hospital_admin'])
 def department_list(request):
     departments = Department.objects.all()
     return render(request, 'departments/department_list.html', {'departments': departments})
 
 @login_required
-@role_required(['admin'])
+@role_required(['admin','hospital_admin'])
 def add_department(request):
     if request.method == 'POST':
         form = DepartmentForm(request.POST)
@@ -26,7 +26,7 @@ def add_department(request):
     return render(request, 'departments/add_department.html', {'form': form})
 
 @login_required
-@role_required(['admin'])
+@role_required(['admin', 'hospital_admin'])
 def edit_department(request, pk):
     department = get_object_or_404(Department, pk=pk)
     if request.method == 'POST':
@@ -39,7 +39,7 @@ def edit_department(request, pk):
     return render(request, 'departments/edit_department.html', {'form': form})
 
 @login_required
-@role_required(['admin'])
+@role_required(['admin', 'hospital_admin'])
 def delete_department(request, pk):
     department = get_object_or_404(Department, pk=pk)
     if request.method == 'POST':
