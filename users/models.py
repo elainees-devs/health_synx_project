@@ -16,8 +16,20 @@ class User(AbstractUser):
         ('hospital_admin', 'Hospital Admin'),
     ]
 
+    PATIENT_TYPE_CHOICES = [
+        ('inpatient', 'Inpatient'),
+        ('outpatient', 'Outpatient'),
+    ]
+
+    GENDER_CHOICES=[
+        ('male', 'Male'),
+        ('female', 'Female'),
+    ]
+
+
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    gender = models.CharField(max_length=20, choices=GENDER_CHOICES, default='male')
 
     # Avoid circular import by using string reference
     department = models.ForeignKey(
@@ -26,6 +38,14 @@ class User(AbstractUser):
         null=True,
         blank=True,
         related_name="users"
+    )
+    # only relevant if role == 'patient'
+    patient_type = models.CharField(
+        max_length=20,
+        choices=PATIENT_TYPE_CHOICES,
+        blank=True,
+        null=True,
+        help_text="Select whether the patient is an inpatient or outpatient."
     )
 
     def __str__(self):
