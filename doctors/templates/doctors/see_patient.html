@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}See Patient{% endblock %}
+{% block header %}See Patient{% endblock %}
+
+{% block content %}
+<div class="mb-3">
+    <a href="{% url 'doctor_queue' %}" class="btn btn-secondary mb-2">← Back to Queue</a>
+</div>
+
+<h3>Patient: {{ queue_item.patient.first_name }} {{ queue_item.patient.last_name }}</h3>
+<p>Temperature: {{ queue_item.vitals.temperature }} °C</p>
+<p>Pulse Rate: {{ queue_item.vitals.pulse_rate }} bpm</p>
+<p>Recorded At: {{ queue_item.vitals.recorded_at }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    
+    <!-- Save notes without completing -->
+    <button type="submit" class="btn btn-primary">Save Notes Only</button>
+
+    <!-- Save notes and mark completed -->
+    <button type="submit" name="completed" class="btn btn-success">Complete & Create Billing</button>
+</form>
+{% endblock %}
