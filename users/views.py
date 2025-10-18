@@ -2,13 +2,18 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_protect
+from django.db.models import Sum
+
 
 from .decorators import role_required
 from .forms import UserRegisterForm, UserLoginForm
 from departments.models import Department
-from users.models import User
+from .models import User
+from patients.forms import PatientForm
+from patients.models import DoctorQueue
+from billing.models import BillingRecord
 
 def register_user(request):
     form = UserRegisterForm(request.POST or None)
@@ -53,37 +58,47 @@ def custom_login(request):
                 form.add_error(None, "Incorrect username/email or password.")  # Non-field error
 
     return render(request, "login.html", {"form": form})
+
+def logout_view(request):
+    logout(request)  # Ends the session
+    return redirect('login')  # Redirect to login page or homepage
+
 # Redirect users after login based on role
 @login_required
 def redirect_after_login(request):
     user = request.user
     if user.is_superuser:
         return redirect('/admin/')
-    elif user.role == 'doctor':
-        return redirect('doctor_dashboard')
-    elif user.role == 'patient':
-        return redirect('patient_dashboard')
-    elif user.role == 'pharmacist':
-        return redirect('pharmacist_dashboard')
-    elif user.role == 'lab_tech':
-        return redirect('lab_tech_dashboard')
-    elif user.role == 'imaging_tech':
-        return redirect('imaging_tech_dashboard')
-    elif user.role == 'billing':
-        return redirect('billing_dashboard')
-    elif user.role == 'nurse':
-        return redirect('nurse_dashboard')
-    elif user.role == 'hospital_admin':
-        return redirect('hospital_admin_dashboard')
-    else:
-        return redirect('login')
+
+    role_redirects = {
+        'doctor': 'doctor_dashboard',
+        'patient': 'patient_dashboard',
+        'pharmacist': 'pharmacist_dashboard',
+        'lab_tech': 'lab_tech_dashboard',
+        'imaging_tech': 'imaging_tech_dashboard',
+        'billing': 'billing_dashboard',
+        'nurse': 'nurse_dashboard',
+        'hospital_admin': 'hospital_admin_dashboard',
+    }
+
+    return redirect(role_redirects.get(user.role, 'login'))
+
 
 
 # Doctor dashboard
 @login_required
 @role_required(['doctor'])
 def doctor_dashboard(request):
-    return render(request, 'users/dashboards/doctor_dashboard.html')
+    # Get all patients currently waiting or with doctor
+    queue = DoctorQueue.objects.filter(status__in=['waiting', 'with_doctor']).order_by('created_at')
+
+    # Count total patients
+    total_patients = queue.count()
+
+    return render(request, 'users/dashboards/doctor_dashboard.html', {
+        'queue': queue,
+        'total_patients': total_patients
+    })
 
 # Hospital Admin dashboard
 @login_required
@@ -92,7 +107,32 @@ def hospital_admin_dashboard(request):
     return render(request, 'users/dashboards/hospital_admin_dashboard.html')
 
 
+# Nurse dashboard
+@login_required
+@role_required(['nurse'])
+def nurse_dashboard(request):
+    return render(request, 'users/dashboards/nurse_dashboard.html')
 
+# Billing Officer dashboard
+@login_required
+@role_required(['admin', 'billing'])
+def billing_dashboard(request):
+    # Get total counts and sums
+    total_bills = BillingRecord.objects.count()
+    total_pending = BillingRecord.objects.filter(paid=False).count()
+    total_collected = BillingRecord.objects.filter(paid=True).aggregate(Sum('amount'))['amount__sum'] or 0
+
+    # Get recent 5 bills
+    recent_bills = BillingRecord.objects.order_by('-created_at')[:5]
+
+    context = {
+        'total_bills': total_bills,
+        'total_pending': total_pending,
+        'total_collected': total_collected,
+        'recent_bills': recent_bills,
+    }
+
+    return render(request, 'users/dashboards/billing_dashboard.html', context)
 
 # Admin dashboard
 @login_required
