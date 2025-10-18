@@ -1,0 +1,20 @@
+<!-- patients/templates/patients/record_vitals.html -->
+{% extends 'base.html' %}
+{% block title %}Record Vitals{% endblock %}
+
+{% block content %}
+<div class="mb-3">
+    <!-- Back Button -->
+    <a href="{% url 'patient_list' %}" class="btn btn-secondary mb-2">
+        ← Back to Patient List
+    </a>
+</div>
+
+<h3>Record Vitals for {{ patient.get_full_name }}</h3>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Save Vitals</button>
+</form>
+{% endblock %}
