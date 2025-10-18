@@ -28,7 +28,17 @@ class UserRegisterForm(forms.ModelForm):
             self.add_error('confirm_password', "Passwords do not match")
 
         return cleaned_data
-    
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        password = self.cleaned_data.get("password")
+        if password:
+            user.set_password(password)  
+        if commit:
+            user.is_active = True  # optional: activate user immediately
+            user.save()
+        return user
+
 class UserLoginForm(forms.Form):
     username = forms.CharField(
         label="Username or Email",
