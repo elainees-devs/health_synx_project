@@ -1,12 +1,20 @@
 # patients/views.py
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.utils.crypto import get_random_string
+from django.utils.text import slugify  
+import uuid
 
 from users.models import User
 from .models import PatientProfile, PatientVitals, DoctorQueue
 from .forms import PatientForm, PatientVitalsForm
 from users.decorators import role_required 
+
+
+User = get_user_model()
+
 
 # ---------------------------------------------------------------------
 # List all patients
@@ -24,13 +32,44 @@ def patient_list(request):
 @role_required(['admin', 'hospital_admin'])
 def add_patient(request):
     form = PatientForm(request.POST or None)
+
     if request.method == 'POST':
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Patient added successfully!')
+            patient = form.save(commit=False)
+
+            # Generate unique username
+            first_name = patient.first_name.strip() if patient.first_name else ''
+            last_name = patient.last_name.strip() if patient.last_name else ''
+            email = patient.email.strip() if patient.email else ''
+            base_username = slugify(f"{first_name}-{last_name}") or "patient"
+            username = base_username
+
+            while User.objects.filter(username=username).exists():
+                username = f"{base_username}-{get_random_string(4)}"
+
+            # Create user safely
+            user = User.objects.create_user(
+                username=username,
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+                password="defaultpassword123",
+                role='patient',
+                gender=patient.gender,
+                patient_type=patient.patient_type,
+                phone_number=patient.phone_number,
+            )
+
+            # Link patient profile
+            patient.user = user
+            patient.save()
+
+            messages.success(request, f"Patient '{first_name} {last_name}' added successfully!")
             return redirect('patient_list')
         else:
-            messages.error(request, 'Please correct the errors below.')
+            messages.error(request, "Please correct the errors below.")
+
+    # Always render the form on GET or invalid POST
     return render(request, 'patients/add_patient.html', {'form': form})
 
 # ---------------------------------------------------------------------
