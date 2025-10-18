@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Doctor Dashboard{% endblock %}
+{% block header %}Doctor Dashboard{% endblock %}
+
+{% block content %}
+
+<h3>Doctor Dashboard</h3>
+
+
+
+<table style="border-collapse: collapse; width: 100%; margin-top: 1rem;">
+    <thead>
+        <tr style="background-color: #f2f2f2;">
+            <th style="border: 1px solid #000; padding: 8px;">#</th>
+            <th style="border: 1px solid #000; padding: 8px;">Patient Name</th>
+            <th style="border: 1px solid #000; padding: 8px;">Temperature (°C)</th>
+            <th style="border: 1px solid #000; padding: 8px;">Pulse Rate (bpm)</th>
+            <th style="border: 1px solid #000; padding: 8px;">Recorded At</th>
+            <th style="border: 1px solid #000; padding: 8px;">Status</th>
+            <th style="border: 1px solid #000; padding: 8px;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in queue %}
+        <tr>
+            <td style="border: 1px solid #000; padding: 8px;">{{ forloop.counter }}</td>
+            <td style="border: 1px solid #000; padding: 8px;">{{ item.patient.first_name }} {{ item.patient.last_name }}</td>
+            <td style="border: 1px solid #000; padding: 8px;">{{ item.vitals.temperature }}</td>
+            <td style="border: 1px solid #000; padding: 8px;">{{ item.vitals.pulse_rate }}</td>
+            <td style="border: 1px solid #000; padding: 8px;">{{ item.vitals.recorded_at }}</td>
+            <td style="border: 1px solid #000; padding: 8px;">{{ item.get_status_display }}</td>
+            <td style="border: 1px solid #000; padding: 8px;">
+                <a href="{% url 'see_patient' item.id %}" class="button" style="background-color:#17a2b8;">See Patient</a>
+
+                <a href="{% url 'update_queue_status' item.id 'sent_to_lab' %}" 
+                   class="button" style="background-color:#ffc107; color:black; padding:4px 8px; text-decoration:none;">Send to Lab</a>
+                <a href="{% url 'update_queue_status' item.id 'sent_to_pharmacy' %}" 
+                   class="button" style="background-color:#28a745; color:white; padding:4px 8px; text-decoration:none;">Send to Pharmacy</a>
+                <a href="{% url 'update_queue_status' item.id 'completed' %}" 
+                   class="button" style="background-color:#dc3545; color:white; padding:4px 8px; text-decoration:none;">Completed</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" style="border: 1px solid #000; padding: 8px; text-align:center;">No patients in queue.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<!-- Total patients in queue -->
+<p><strong>Total Patients in Queue:</strong> {{ total_patients }}</p>
+
+{% endblock %}
