@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Add Department</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Department</button>
+</form>
+
+<a href="{% url 'department_list' %}">Back to Department List</a>
+{% endblock %}
