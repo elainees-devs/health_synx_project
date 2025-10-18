@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Billing Dashboard{% endblock %}
+
+{% block content %}
+<h2>Billing Officer Dashboard</h2>
+
+<div class="row mb-4">
+    <!-- Total Bills -->
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Bills</h5>
+                <p class="card-text fs-3">{{ total_bills }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Payments -->
+    <div class="col-md-4">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Pending Payments</h5>
+                <p class="card-text fs-3">{{ total_pending }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Collected -->
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Collected</h5>
+                <p class="card-text fs-3">{{ total_collected }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3>Recent Billing Records</h3>
+<p>Total records: {{ records|length }}</p>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Patient</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Paid</th>
+            <th>Created At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in recent_bills %}
+        <tr>
+            <td>{{ record.patient.get_full_name }}</td>
+            <td>{{ record.description }}</td>
+            <td>{{ record.amount }}</td>
+            <td>{{ record.paid|yesno:"Yes,No" }}</td>
+            <td>{{ record.created_at|date:"M d, Y H:i" }}</td>
+            <td>
+                <a href="{% url 'billing_detail' record.pk %}" class="btn btn-info btn-sm">View</a>
+                {% if not record.paid %}
+                <a href="{% url 'billing_mark_paid' record.pk %}" class="btn btn-success btn-sm">Mark Paid</a>
+                {% endif %}
+                <a href="{% url 'billing_edit' record.pk %}" class="btn btn-warning btn-sm">Edit</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" class="text-center">No billing records found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'billing_list' %}" class="btn btn-primary mt-3">View All Bills</a>
+{% endblock %}
