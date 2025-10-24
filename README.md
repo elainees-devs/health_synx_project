@@ -1,86 +1,99 @@
-# 🏥 Health Synx – Hospital Management System
+# 🏥 Health Synx – Hospital Management System (API Version)
 
-**Health Synx** is a modular hospital management platform built with **Django**.
-It simplifies patient registration, vital recording, doctor queue management, and billing operations in a hospital environment.
+**Health Synx** is a modular **Hospital Management API** built with **Django REST Framework**.  
+It simplifies patient registration, vitals tracking, doctor queue management, and billing workflows in a hospital setting.
 
 ---
 
-#### 📘 Documentation
+## 📘 Documentation
 
-For detailed project references, check out:
+All API endpoints and models are documented automatically using **Swagger** and **ReDoc**:
 
+- **Swagger UI** → [http://127.0.0.1:8000/swagger/](http://127.0.0.1:8000/swagger/)
+- **ReDoc UI** → [http://127.0.0.1:8000/redoc/](http://127.0.0.1:8000/redoc/)
+- **OpenAPI Schema (JSON)** → [http://127.0.0.1:8000/swagger.json](http://127.0.0.1:8000/swagger.json)
+
+For advanced references:
 - [**Database Structure**](./DATABASE.md)
 - [**Security Overview**](./SECURITY.md)
 
+---
+
+## 🚀 Features
+
+### 👩‍⚕️ Core Modules
+
+#### **Users & Roles**
+Supports multiple user types with permission-based access:
+- Admin
+- Hospital Admin
+- Doctor
+- Nurse
+- Lab Technician
+- Pharmacist
+- Billing Officer
+- Patient
+
+#### **Patient Management**
+- Register and manage patients.
+- Automatic username generation.
+- View and edit patient records.
+
+#### **Vitals Recording**
+- Nurses can record temperature, pulse, etc.
+- Historical vitals tracking per patient.
+
+#### **Doctor Queue**
+- Automatically queue patients after vitals recording.
+- Status transitions: `waiting → with_doctor → lab/pharmacy → completed`.
+
+#### **Doctor Notes**
+- Doctors record diagnoses and prescriptions.
+- Notes are linked to queue and patient visits.
+
+#### **Billing**
+- Billing records auto-generated after consultations.
+- Integrated with doctor queue and prescriptions.
 
 ---
 
-### 🚀 Features
-
-#### 👩‍⚕️ Core Modules
-
-* **Users & Roles** — Supports multiple user roles:
-
-  * Admin, Hospital Admin, Doctor, Nurse, Lab Tech, Pharmacist, Billing Officer, and Patient.
-* **Patient Management**
-
-  * Register new patients with automatic username generation.
-  * Edit or delete patient details.
-  * View all registered patients.
-* **Patient Vitals**
-
-  * Nurses can record vitals (temperature, pulse rate, etc.).
-  * Vitals history per patient.
-* **Doctor Queue**
-
-  * Automatically queue patients for doctor consultation after vitals recording.
-  * Manage queue status: waiting → with doctor → lab/pharmacy → completed.
-* **Doctor Notes**
-
-  * Doctors can record diagnosis and prescriptions.
-* **Billing**
-
-  * Billing record automatically generated after consultation completion.
-
----
-
-### 🧰 Tech Stack
+## 🧰 Tech Stack
 
 | Component             | Technology                      |
 | --------------------- | ------------------------------- |
-| **Backend Framework** | Django 5.x                      |
+| **Backend Framework** | Django 5.x + Django REST Framework |
 | **Database**          | MySQL                           |
-| **Frontend**          | HTML, Bootstrap / Tailwind      |
-| **Authentication**    | Django Auth (Custom User Model) |
+| **API Docs**          | drf-yasg (Swagger + ReDoc)      |
+| **Authentication**    | Token-based Auth (DRF)          |
 | **Language**          | Python 3.10+                    |
 
 ---
 
-### ⚙️ Installation Guide
+## ⚙️ Installation Guide
 
-#### 1️⃣ Clone the Repository
+### 1️⃣ Clone the Repository
 
 ```bash
 git clone https://github.com/<your-username>/health_synx.git
 cd health_synx
-```
+````
 
-#### 2️⃣ Create Virtual Environment
+### 2️⃣ Create Virtual Environment
 
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-#### 3️⃣ Install Dependencies
+### 3️⃣ Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-#### 4️⃣ Configure Database (MySQL)
+### 4️⃣ Configure Database (MySQL)
 
-In your `health_synx/settings.py`:
+Update `health_synx/settings.py`:
 
 ```python
 DATABASES = {
@@ -95,42 +108,43 @@ DATABASES = {
 }
 ```
 
-Then run:
+Then migrate:
 
 ```bash
-python3 manage.py makemigrations
-python3 manage.py migrate
+python manage.py makemigrations
+python manage.py migrate
 ```
 
-#### 5️⃣ Create Superuser
+### 5️⃣ Create Superuser
 
 ```bash
-python3 manage.py createsuperuser
+python manage.py createsuperuser
 ```
 
-#### 6️⃣ Run the Development Server
+### 6️⃣ Run the Server (HTTP)
 
 ```bash
-python3 manage.py runserver
+python manage.py runserver
 ```
 
-Visit: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+Visit:
+👉 [http://127.0.0.1:8000/swagger/](http://127.0.0.1:8000/swagger/)
 
 ---
 
-### 🧩 App Structure
+## 🧩 App Structure
 
 ```
 health_synx/
 │
-├── users/             # User & role management
-├── patients/          # Patient registration, vitals, queue
+├── users/             # Authentication & roles
+├── patients/          # Patient, vitals, queue, prescriptions
 ├── doctors/           # Doctor profiles and notes
-├── billing/           # Billing records
+├── nurses/            # Nurse-related endpoints
+├── billing/           # Billing logic
 ├── departments/       # Hospital departments
-│
-├── templates/         # Shared HTML templates
-├── static/            # CSS, JS, images
+├── diagnostics/       # Lab and diagnostic tests
+├── pharmacy/          # Pharmacy & medicines
 │
 ├── manage.py
 └── README.md
@@ -138,7 +152,7 @@ health_synx/
 
 ---
 
-### 🧑‍💻 Roles & Access Control
+## 🧑‍💻 Roles & Access Control
 
 | Role               | Permissions                     |
 | ------------------ | ------------------------------- |
@@ -146,51 +160,84 @@ health_synx/
 | **Hospital Admin** | Manage staff & patients         |
 | **Nurse**          | Record vitals, manage queue     |
 | **Doctor**         | View patients, record diagnosis |
-| **Billing**        | Process payments                |
+| **Billing**        | Manage payments                 |
 | **Patient**        | Limited self-access             |
 
 ---
 
-### 🧪 Example Test Users
+## 🔑 Authentication
 
-| Username    | Role           | Password      |
-| --------    | ------         | -----------   |
-| susanpeters | Hosiptal Admin | `Nairobi2025@`|
-| kellypeters | Nurse          | `Nairobi2025` |
-| lilyjohns   | Doctor         | `Nairobi2025` |
-| marykanes   | Billing Officer| `Nairobi2025` |
+All endpoints use **Token Authentication**.
+
+### Obtain Token
+
+```bash
+POST /api/login/
+```
+
+Response:
+
+```json
+{
+  "token": "your_auth_token"
+}
+```
+
+Include in headers:
+
+```
+Authorization: Token your_auth_token
+```
 
 ---
 
-### 🛡️ Error Handling
+## 🧪 Example Test Users
 
-Common issues:
-
-* **IntegrityError (duplicate username)** — Automatically prevented using slug + random string.
-* **Access Denied** — Controlled via `@role_required` decorator in `users.decorators`.
+| Username    | Role            | Password     |
+| ----------- | --------------- | ------------ |
+| susanpeters | Hospital Admin  | Nairobi2025@ |
+| kellypeters | Nurse           | Nairobi2025  |
+| lilyjohns   | Doctor          | Nairobi2025  |
+| marykanes   | Billing Officer | Nairobi2025  |
 
 ---
 
-### 🧱 Future Enhancements
+## 🛡️ Error Handling
+
+| Error Type | Description             |
+| ---------- | ----------------------- |
+| **400**    | Invalid input data      |
+| **401**    | Authentication required |
+| **403**    | Permission denied       |
+| **404**    | Resource not found      |
+| **500**    | Server-side issue       |
+
+---
+
+## 🧱 Future Enhancements
 
 * ✅ Appointment scheduling system
-* ✅ Laboratory results integration
-* ✅ Pharmacy inventory tracking
-* ✅ REST API using Django REST Framework
-* ✅ React or Vue frontend
+* ✅ Laboratory integration
+* ✅ Pharmacy inventory management
+* ✅ Mobile app (React Native)
+* ✅ Cloud deployment (AWS / Docker)
 
 ---
 
-### 🤝 Contributing
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a new branch (`feature/new-module`)
-3. Commit changes
-4. Open a Pull Request
+3. Commit and push your changes
+4. Submit a Pull Request
 
 ---
 
-### Author
+## 👩‍💻 Author
 
-System Developed by Elaine Muhombe
+**System Developed by:**
+*Elaine Muhombe*
+💼 Backend Developer | DevOps Learner
+📧 [support@healthsynx.com](mailto:support@healthsynx.com)
 
+```
