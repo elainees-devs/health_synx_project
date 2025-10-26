@@ -1,11 +1,12 @@
 # departments/urls.py
-from django.urls import path
-from . import views
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import DepartmentViewSet
+
+# Create a DRF router and register the viewset
+router = DefaultRouter()
+router.register(r'', DepartmentViewSet, basename='department')
 
 urlpatterns = [
-    path('', views.department_list, name='department_list'),
-    path('add/', views.add_department, name='add_department'),
-    path('edit/<int:pk>/', views.edit_department, name='edit_department'),
-    path('delete/<int:pk>/', views.delete_department, name='delete_department'),
-
+    path('', include(router.urls)),
 ]
