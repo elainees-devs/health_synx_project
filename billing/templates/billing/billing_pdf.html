@@ -1,42 +1,10 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <title>Billing Record</title>
-    <style>
-        body { font-family: Arial, sans-serif; font-size: 14px; }
-        h2 { text-align: center; margin-bottom: 30px; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        th, td { border: 1px solid #333; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-    </style>
-</head>
+<head><title>Billing PDF</title></head>
 <body>
-    <h2>Billing Record</h2>
-
-    <table>
-        <tr>
-            <th>Patient</th>
-            <td>{{ record.patient.get_full_name }}</td>
-        </tr>
-        <tr>
-            <th>Description</th>
-            <td>{{ record.description }}</td>
-        </tr>
-        <tr>
-            <th>Amount</th>
-            <td>{{ record.amount }}</td>
-        </tr>
-        <tr>
-            <th>Paid</th>
-            <td>{{ record.paid|yesno:"Yes,No" }}</td>
-        </tr>
-        <tr>
-            <th>Created At</th>
-            <td>{{ record.created_at|date:"M d, Y H:i" }}</td>
-        </tr>
-    </table>
-
-    <p>Thank you for using HealthSynx Hospital Management System.</p>
+    <h1>Billing Record</h1>
+    <p>Patient: {{ record.patient.username }}</p>
+    <p>Amount: {{ record.amount }}</p>
+    <p>Paid: {{ record.paid }}</p>
 </body>
 </html>
