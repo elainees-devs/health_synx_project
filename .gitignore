@@ -33,3 +33,5 @@ static/
 
 # Windows
 Thumbs.db
+cert.crt
+cert.key
