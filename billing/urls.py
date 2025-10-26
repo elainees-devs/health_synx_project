@@ -1,10 +1,12 @@
 # billing/urls.py
-from django.urls import path
-from . import views
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import BillingRecordViewSet
+
+# Create a DRF router and register the BillingRecordViewSet
+router = DefaultRouter()
+router.register(r'billing', BillingRecordViewSet, basename='billing')
 
 urlpatterns = [
-    path('', views.billing_list, name='billing_list'),
-    path('<int:pk>/', views.billing_detail, name='billing_detail'),
-    path('<int:pk>/edit/', views.billing_edit, name='billing_edit'),
-    path('<int:pk>/mark-paid/', views.mark_paid, name='billing_mark_paid'),
+    path('', include(router.urls)),
 ]
