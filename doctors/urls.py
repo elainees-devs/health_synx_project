@@ -1,10 +1,20 @@
 # doctors/urls.py
-from django.urls import path
-from . import views
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import (
+    DoctorViewSet,
+    DoctorQueueViewSet,
+    DoctorNoteViewSet,
+    PrescriptionViewSet,
+)
+
+router = DefaultRouter()
+router.register(r'doctors', DoctorViewSet, basename='doctor')
+router.register(r'queue', DoctorQueueViewSet, basename='doctor-queue')
+router.register(r'notes', DoctorNoteViewSet, basename='doctor-note')
+router.register(r'prescriptions', PrescriptionViewSet, basename='prescription')
 
 urlpatterns = [
-    path('', views.doctor_list, name='doctor_list'),
-    path('queue/', views.doctor_queue, name='doctor_queue'),
-    path('queue/update/<int:queue_id>/<str:action>/', views.update_queue_status, name='update_queue_status'),
-    path('queue/<int:queue_id>/see/', views.see_patient, name='see_patient'),
+    path('', include(router.urls)),
 ]
+
