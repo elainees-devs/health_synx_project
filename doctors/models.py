@@ -1,24 +1,22 @@
 # doctors/models.py
 from django.db import models
-
+from django.core.exceptions import ValidationError
 from users.models import User
-from departments.models import Department
 
 class DoctorProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+
     specialization = models.CharField(max_length=100)
     license_number = models.CharField(max_length=50, unique=True)
 
-    # Work-related details
-    department = models.ForeignKey(
-        Department,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='doctors'
-    )
+    def clean(self):
+        # Enforce that only users with the doctor role can be assigned
+        if self.user.role != 'doctor':
+            raise ValidationError("The linked user must have the role 'doctor'.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()  # run validation
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        # Get doctor's full name
-        full_name = f"{self.user.first_name} {self.user.last_name}".strip()
-        return f"{full_name} ({self.user.role})"
+        return f"Dr. {self.user.get_full_name()} - {self.specialization}"
