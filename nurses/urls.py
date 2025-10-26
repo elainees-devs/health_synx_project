@@ -1,8 +1,11 @@
 # nurses/urls.py
-from django.urls import path
-from . import views
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import NursePatientViewSet
+
+router = DefaultRouter()
+router.register(r'patients', NursePatientViewSet, basename='nursepatient')
 
 urlpatterns = [
-    path('', views.nurse_dashboard, name='nurse_dashboard'),              
-    path('patients/', views.patient_list, name='patient_list'),  
+    path('', include(router.urls)),
 ]
