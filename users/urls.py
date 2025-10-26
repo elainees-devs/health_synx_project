@@ -1,15 +1,27 @@
 # users/urls.py
-from django.urls import path
-from django.contrib.auth import views as auth_views
-from . import views 
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from . import views  
+from .views import register_patient
+
+# DRF router (for future API endpoints like /api/users/)
+router = DefaultRouter()
+# Example: router.register(r'users', views.UserViewSet, basename='user')
 
 urlpatterns = [
-    path('logout/', views.logout_view, name='logout'), 
+    # Authentication routes (no templates)
+    path('login/', views.login_user, name='login'),
+    path('logout/', views.logout_user, name='logout'),
     path('redirect-after-login/', views.redirect_after_login, name='redirect_after_login'),
+    path('register/patient/', register_patient, name='register_patient'),
 
-    # Dashboards
-    path('doctor/', views.doctor_dashboard, name='doctor_dashboard'),
-    path('hospital-admin/', views.hospital_admin_dashboard, name='hospital_admin_dashboard'),
-    path('nurse/', views.nurse_dashboard, name='nurse_dashboard'),
-    path('billing/', views.billing_dashboard, name='billing_dashboard'),
+    # REST-style dashboard endpoints
+    path('doctor/', views.DoctorDashboardView.as_view(), name='doctor_dashboard'),
+    path('hospital-admin/', views.HospitalAdminDashboardView.as_view(), name='hospital_admin_dashboard'),
+    path('nurse/', views.NurseDashboardView.as_view(), name='nurse_dashboard'),
+    path('pharmacy/', views.PharmacyDashboardView.as_view(), name='pharmacy_dashboard'),
+    path('billing/', views.BillingDashboardView.as_view(), name='billing_dashboard'),
+
+    # Optional: include DRF router endpoints
+    path('api/', include(router.urls)),
 ]
