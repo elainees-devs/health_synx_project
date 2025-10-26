@@ -1,31 +1,24 @@
-# nurse/views.py
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-
+# nurses/views.py
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+from users.permissions import RolePermission
 from users.models import User
-from users.decorators import role_required  
+from users.serializers import UserSerializer
 
-@login_required
-@role_required(['nurse'])
-def nurse_dashboard(request):
+
+class NursePatientViewSet(viewsets.ReadOnlyModelViewSet):
     """
-    Display all registered patients with links to record vitals.
+    API for nurses to view all patients.
+    Only users with role='nurse' can access.
     """
-    patients = User.objects.filter(role='patient').select_related('patientprofile')
+    queryset = User.objects.filter(role='patient').select_related('patientprofile').order_by('id')
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated, RolePermission] 
+    allowed_roles = ['nurse']
 
-    return render(request, 'users/dashboards/nurse_dashboard.html', {
-        'patients': patients
-    })
-
-# -----------------------------
-# List all patients (role='patient')
-# -----------------------------
-@login_required
-@role_required(['nurse'])
-def patient_list(request):
-    patients = User.objects.filter(role='patient')
-    context = {
-        'patients': patients,
-    }
-    # Use the existing template from patients app
-    return render(request, 'patients/patient_list.html', context)
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search = self.request.query_params.get('search')
+        if search:
+            queryset = queryset.filter(username__icontains=search)
+        return queryset
