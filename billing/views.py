@@ -1,16 +1,19 @@
 # billing/views.py
-from django.shortcuts import render, get_object_or_404, redirect
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from django.db.models import Sum
 from django.http import HttpResponse
 from django.template.loader import get_template
-from django.shortcuts import render
 from xhtml2pdf import pisa
 
-from users.decorators import role_required
 from .models import BillingRecord
-from .forms import BillingRecordForm
+from .serializers import BillingRecordSerializer
+from users.permissions import RolePermission
+
 
 def render_to_pdf(template_src, context_dict={}):
-    """Render a Django template to PDF using xhtml2pdf"""
     template = get_template(template_src)
     html = template.render(context_dict)
     response = HttpResponse(content_type='application/pdf')
@@ -20,44 +23,50 @@ def render_to_pdf(template_src, context_dict={}):
         return HttpResponse('Error generating PDF <pre>' + html + '</pre>')
     return response
 
-@role_required(allowed_roles=['admin', 'billing'])
-def billing_list(request):
-    """View all billing records"""
-    records = BillingRecord.objects.all().order_by('-created_at')
-    return render(request, 'billing/billing_list.html', {'records': records})
 
-@role_required(allowed_roles=['admin', 'billing'])
-def billing_detail(request, pk):
-    """View a single billing record"""
-    record = get_object_or_404(BillingRecord, pk=pk)
-    return render(request, 'billing/billing_detail.html', {'record': record})
+class BillingRecordViewSet(viewsets.ModelViewSet):
+    """
+    REST API for Billing Records
+    """
+    queryset = BillingRecord.objects.select_related('patient').order_by('-created_at')
+    serializer_class = BillingRecordSerializer
+    permission_classes = [IsAuthenticated, RolePermission]
 
-@role_required(allowed_roles=['admin', 'billing'])
-def billing_edit(request, pk):
-    """Edit an existing billing record"""
-    record = get_object_or_404(BillingRecord, pk=pk)
-    if request.method == 'POST':
-        form = BillingRecordForm(request.POST, instance=record)
-        if form.is_valid():
-            form.save()
-            return redirect('billing_list')
-    else:
-        form = BillingRecordForm(instance=record)
+    @action(detail=False, methods=['get'], url_path='totals')
+    def totals(self, request):
+        records = self.get_queryset()
+        category_totals = (
+            records.values('category')
+            .annotate(total=Sum('amount'))
+            .order_by('category')
+        )
+        grand_total = records.aggregate(total=Sum('amount'))['total'] or 0
+        return Response({
+            'category_totals': category_totals,
+            'grand_total': grand_total,
+        })
 
-    return render(request, 'billing/billing_edit.html', {'form': form, 'record': record})
+    @action(detail=True, methods=['post'], url_path='mark-paid')
+    def mark_paid(self, request, pk=None):
+        record = self.get_object()
+        record.paid = True
+        record.save()
 
-@role_required(allowed_roles=['admin', 'billing'])
-def mark_paid(request, pk):
-    """Mark billing record as paid and generate PDF"""
-    record = get_object_or_404(BillingRecord, pk=pk)
-    record.paid = True
-    record.save()
-    context = {'record': record}
-    return render_to_pdf('billing/billing_pdf.html', context)
+        category_totals = (
+            BillingRecord.objects.filter(patient=record.patient)
+            .values('category')
+            .annotate(total=Sum('amount'))
+        )
+        grand_total = (
+            BillingRecord.objects.filter(patient=record.patient)
+            .aggregate(total=Sum('amount'))['total'] or 0
+        )
 
+        context = {
+            'record': record,
+            'category_totals': category_totals,
+            'grand_total': grand_total,
+        }
 
-@role_required(allowed_roles=['admin', 'billing'])
-def no_permission(request):
-    """Page shown when user does not have access"""
-    return render(request, 'billing/no_permission.html')
-
+        pdf_response = render_to_pdf('billing/billing_pdf.html', context)
+        return pdf_response
