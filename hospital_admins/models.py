@@ -1,5 +1,6 @@
 # hospital_admins/models.py
 from django.db import models
+from django.core.exceptions import ValidationError
 from users.models import User
 from departments.models import Department
 
@@ -14,6 +15,15 @@ class HospitalAdminProfile(models.Model):
         blank=True,
         related_name='hospital_admins'
     )
+
+    def clean(self):
+        """Ensure that the user has role hospital_admin"""
+        if self.user.user_role != 'hospital_admin': 
+            raise ValidationError(f"User {self.user.email} is not a hospital_admin.")
+
+    def save(self, *args, **kwargs):
+        self.clean()  # validate before saving
+        super().save(*args, **kwargs)
 
     def __str__(self):
         # Get user's full name
