@@ -27,6 +27,7 @@ from .serializers import (
     UserLoginSerializer,
     UserSerializer,
 )
+from core.pagination import StandardResultsSetPagination
 
 
 # -------------------------------
@@ -339,3 +340,38 @@ class AdminDashboardView(APIView):
     def get(self, request):
         request.allowed_roles = ['admin']
         return Response({"message": "Welcome Admin! Dashboard data loaded."})
+
+# -------------------------------
+# Get all users
+# -------------------------------
+class UserListView(APIView):
+    permission_classes = [IsAuthenticated, RolePermission]
+    pagination_class = StandardResultsSetPagination
+
+    @swagger_auto_schema(
+        operation_summary="Get all users (paginated)",
+        manual_parameters=[
+            openapi.Parameter(
+                'page',
+                openapi.IN_QUERY,
+                description="Page number",
+                type=openapi.TYPE_INTEGER
+            ),
+            openapi.Parameter(
+                'page_size',
+                openapi.IN_QUERY,
+                description="Number of items per page",
+                type=openapi.TYPE_INTEGER
+            ),
+        ],
+        responses={200: UserSerializer(many=True)}
+    )
+    def get(self, request, *args, **kwargs):
+        request.allowed_roles = ['admin', 'hospital_admin']  # Only admins can see all users
+        users = User.objects.all()  # Meta.ordering ensures order by id
+
+        # Apply pagination manually
+        paginator = self.pagination_class()
+        paginated_users = paginator.paginate_queryset(users, request)
+        serializer = UserSerializer(paginated_users, many=True)
+        return paginator.get_paginated_response(serializer.data)
