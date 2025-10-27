@@ -56,3 +56,4 @@ class User(AbstractUser):
         indexes = [
             models.Index(fields=['role']),
         ]
+        ordering = ['id']  # Order by id ascending
