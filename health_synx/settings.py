@@ -17,7 +17,33 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # Django settings
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'your-production-domain.com']
+
+# ---------------------------
+# SECURITY: HTTPS for Production
+# ---------------------------
+if not DEBUG:
+    # Force all traffic over HTTPS
+    SECURE_SSL_REDIRECT = True
+
+    # Set secure cookies
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+    # Prevent browser from guessing content type
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+
+    # Add HSTS (HTTP Strict Transport Security)
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+    # Ensure browser only sends cookies via HTTPS
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+else:
+    SECURE_SSL_REDIRECT = False
+
 
 # Application definition
 INSTALLED_APPS = [
