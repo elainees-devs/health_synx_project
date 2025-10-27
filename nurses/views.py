@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from users.permissions import RolePermission
 from users.models import User
 from users.serializers import UserSerializer
+from core.pagination import StandardResultsSetPagination
 
 
 class NursePatientViewSet(viewsets.ReadOnlyModelViewSet):
@@ -15,6 +16,7 @@ class NursePatientViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated, RolePermission] 
     allowed_roles = ['nurse']
+    pagination_class = StandardResultsSetPagination 
 
     def get_queryset(self):
         queryset = super().get_queryset()
