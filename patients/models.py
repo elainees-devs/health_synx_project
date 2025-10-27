@@ -20,6 +20,9 @@ class PatientProfile(models.Model):
     def __str__(self):
         full_name = f"{self.user.first_name} {self.user.last_name}".strip()
         return full_name or self.user.username
+    
+    class Meta:
+        ordering = ['user__first_name', 'user__last_name', 'id']
 
 
 # ---------------------------------------------------------------------
@@ -37,6 +40,9 @@ class PatientVitals(models.Model):
 
     def __str__(self):
         return f"Vitals for {self.patient.get_full_name()} at {self.recorded_at}"
+    
+    class Meta:
+        ordering = ['-recorded_at', 'id']  # newest vitals first
 
 
 # ---------------------------------------------------------------------
@@ -84,6 +90,9 @@ class DoctorQueue(models.Model):
 
     def __str__(self):
         return f"{self.patient.get_full_name()} - {self.status}"
+    
+    class Meta:
+        ordering = ['-created_at', 'id']
 
 
 # ---------------------------------------------------------------------
@@ -109,6 +118,9 @@ class DoctorNote(models.Model):
 
     def __str__(self):
         return f"Doctor Note by {self.doctor.get_full_name()} for {self.patient.get_full_name()}"
+    
+    class Meta:
+        ordering = ['-created_at', 'id']
 
 
 # ---------------------------------------------------------------------
@@ -142,6 +154,8 @@ class Prescription(models.Model):
     def __str__(self):
         return f"Prescription for {self.patient.username} by {self.doctor.username if self.doctor else 'Unknown'}"
 
+    class Meta:
+        ordering = ['-date_issued', 'id']
 
 # ---------------------------------------------------------------------
 # Prescription items model linking medicines to prescriptions
@@ -157,3 +171,6 @@ class PrescriptionItem(models.Model):
 
     def __str__(self):
         return f"{self.medicine.name} for {self.prescription.patient.username}"
+    
+    class Meta:
+        ordering = ['prescription__id', 'id']
