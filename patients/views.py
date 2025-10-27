@@ -10,6 +10,7 @@ from users.permissions import RolePermission
 from .models import PatientProfile, PatientVitals, DoctorQueue
 from .serializers import PatientSerializer, PatientVitalsSerializer, DoctorQueueSerializer
 from billing.utils import create_consultation_fee
+from core.pagination import StandardResultsSetPagination
 
 
 class PatientViewSet(viewsets.ModelViewSet):
@@ -17,6 +18,7 @@ class PatientViewSet(viewsets.ModelViewSet):
     serializer_class = PatientSerializer
     permission_classes = [IsAuthenticated, RolePermission]
     allowed_roles = ['admin', 'hospital_admin', 'nurse', 'doctor']
+    pagination_class = StandardResultsSetPagination
 
     def get_serializer_class(self):
         # fallback for standard actions
