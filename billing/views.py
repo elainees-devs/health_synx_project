@@ -11,6 +11,7 @@ from xhtml2pdf import pisa
 from .models import BillingRecord
 from .serializers import BillingRecordSerializer
 from users.permissions import RolePermission
+from core.pagination import StandardResultsSetPagination
 
 
 def render_to_pdf(template_src, context_dict={}):
@@ -31,6 +32,7 @@ class BillingRecordViewSet(viewsets.ModelViewSet):
     queryset = BillingRecord.objects.select_related('patient').order_by('-created_at')
     serializer_class = BillingRecordSerializer
     permission_classes = [IsAuthenticated, RolePermission]
+    pagination_class = StandardResultsSetPagination  # add pagination
 
     @action(detail=False, methods=['get'], url_path='totals')
     def totals(self, request):
