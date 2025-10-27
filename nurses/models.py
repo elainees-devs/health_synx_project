@@ -29,3 +29,7 @@ class NurseProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.get_full_name()} ({self.user.user_role})"
+    
+    class Meta:
+        ordering = ['department__name', 'user__first_name', 'user__last_name', 'id']
+
