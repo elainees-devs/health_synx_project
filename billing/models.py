@@ -32,5 +32,8 @@ class BillingRecord(models.Model):
     paid = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['id']
+
     def __str__(self):
         return f"{self.patient.get_full_name()} - {self.get_category_display()} - {self.amount}"
