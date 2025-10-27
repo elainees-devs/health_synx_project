@@ -10,6 +10,10 @@ class Department(models.Model):
     def __str__(self):
         return self.name
     
+    class Meta:
+        ordering = ['id']  # Order departments by ID
+
+    
     
 class DepartmentStaff(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
@@ -25,3 +29,4 @@ class DepartmentStaff(models.Model):
             models.Index(fields=['department']),
             models.Index(fields=['staff']),
         ]
+        ordering = ['id']  # Order staff assignments by ID
