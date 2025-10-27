@@ -225,12 +225,15 @@ See [SECURITY.md](./SECURITY.md) for details.
 
 ## 🔑 Test Credentials (Development Only)
 
-| Username    | Role            | Password       |
-| ----------- | --------------- | -------------- |
-| susanpeters | Hospital Admin  | `Nairobi2025@` |
-| kellypeters | Nurse           | `Nairobi2025`  |
-| lilyjohns   | Doctor          | `Nairobi2025`  |
-| marykanes   | Billing Officer | `Nairobi2025`  |
+| Username    | Role                | Password       |
+| ----------- | ---------------     | -------------- |
+| susanpeters | Hospital Admin      | `TestPass123!` |
+| kellypeters | Nurse               | `TestPass123!` |
+| lilyjohns   | Doctor              | `TestPass123!` |
+| marykanes   | Billing Officer     | `Test123Pass!` |
+| janemikes   | Pharmacists         | `TestPass123!` |
+| robertmakau | Lab Technician      | `TestPass123!` |
+| allankizito | Imaging Technician  | `Test123Pass!` |
 
 ⚠️ Use for testing only; not for production.
 
