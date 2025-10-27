@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import HospitalAdmin
 from .serializers import HospitalAdminSerializer
 from users.permissions import IsAdminUser  
+from core.pagination import StandardResultsSetPagination
 
 
 class HospitalAdminViewSet(viewsets.ModelViewSet):
@@ -16,6 +17,7 @@ class HospitalAdminViewSet(viewsets.ModelViewSet):
     queryset = HospitalAdmin.objects.all().order_by('-created_at')
     serializer_class = HospitalAdminSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
+    pagination_class = StandardResultsSetPagination
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
