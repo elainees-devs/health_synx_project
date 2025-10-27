@@ -13,6 +13,7 @@ from .serializers import (
 )
 from users.permissions import RolePermission
 from diagnostics.utils import create_diagnostic_fee  
+from core.pagination import StandardResultsSetPagination
 
 
 # -----------------------------
@@ -22,12 +23,14 @@ class LabTestViewSet(viewsets.ModelViewSet):
     queryset = LabTest.objects.all().order_by('name')
     serializer_class = LabTestSerializer
     permission_classes = [IsAuthenticated, RolePermission]
+    pagination_class = StandardResultsSetPagination
 
 
 class LabQueueViewSet(viewsets.ModelViewSet):
     queryset = LabQueue.objects.select_related('patient', 'lab_test', 'technician').order_by('-created_at')
     serializer_class = LabQueueSerializer
     permission_classes = [IsAuthenticated, RolePermission]
+    pagination_class = StandardResultsSetPagination
 
     @action(detail=True, methods=['post'])
     def complete(self, request, pk=None):
@@ -55,12 +58,14 @@ class XRayViewSet(viewsets.ModelViewSet):
     queryset = XRay.objects.all().order_by('name')
     serializer_class = XRaySerializer
     permission_classes = [IsAuthenticated, RolePermission]
+    pagination_class = StandardResultsSetPagination
 
 
 class XRayQueueViewSet(viewsets.ModelViewSet):
     queryset = XRayQueue.objects.select_related('patient', 'xray', 'technician').order_by('-created_at')
     serializer_class = XRayQueueSerializer
     permission_classes = [IsAuthenticated, RolePermission]
+    pagination_class = StandardResultsSetPagination
 
     @action(detail=True, methods=['post'])
     def complete(self, request, pk=None):
@@ -88,12 +93,14 @@ class MRIViewSet(viewsets.ModelViewSet):
     queryset = MRI.objects.all().order_by('name')
     serializer_class = MRISerializer
     permission_classes = [IsAuthenticated, RolePermission]
+    pagination_class = StandardResultsSetPagination
 
 
 class MRIQueueViewSet(viewsets.ModelViewSet):
     queryset = MRIQueue.objects.select_related('patient', 'mri', 'technician').order_by('-created_at')
     serializer_class = MRIQueueSerializer
     permission_classes = [IsAuthenticated, RolePermission]
+    pagination_class = StandardResultsSetPagination
 
     @action(detail=True, methods=['post'])
     def complete(self, request, pk=None):
