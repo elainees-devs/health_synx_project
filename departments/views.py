@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Department
 from .serializers import DepartmentSerializer
 from .permissions import IsAdminOrHospitalAdmin  
+from core.pagination import StandardResultsSetPagination
 
 class DepartmentViewSet(viewsets.ModelViewSet):
     """
@@ -15,6 +16,7 @@ class DepartmentViewSet(viewsets.ModelViewSet):
     queryset = Department.objects.all().order_by('name')
     serializer_class = DepartmentSerializer
     permission_classes = [IsAuthenticated, IsAdminOrHospitalAdmin] 
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         """
