@@ -11,6 +11,7 @@ from patients.serializers import PrescriptionSerializer
 from .serializers import MedicineSerializer, SupplierSerializer
 from users.permissions import RolePermission 
 from billing.utils import create_pharmacy_fee
+from core.pagination import StandardResultsSetPagination
 
 
 # -----------------------------
@@ -20,6 +21,7 @@ class MedicineViewSet(viewsets.ModelViewSet):
     queryset = Medicine.objects.all().order_by('name')
     serializer_class = MedicineSerializer
     permission_classes = [IsAuthenticated, RolePermission]  # pharmacist only
+    pagination_class = StandardResultsSetPagination
 
     @action(detail=True, methods=['post'])
     def dispense(self, request, pk=None):
@@ -65,6 +67,7 @@ class SupplierViewSet(viewsets.ModelViewSet):
     queryset = Supplier.objects.all().order_by('name')
     serializer_class = SupplierSerializer
     permission_classes = [IsAuthenticated, RolePermission]  # pharmacist only
+    pagination_class = StandardResultsSetPagination
 
 
 # -----------------------------
@@ -74,3 +77,4 @@ class PrescriptionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Prescription.objects.all().order_by('-id')
     serializer_class = PrescriptionSerializer
     permission_classes = [IsAuthenticated, RolePermission]  # pharmacist only
+    pagination_class = StandardResultsSetPagination
