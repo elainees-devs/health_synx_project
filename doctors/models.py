@@ -20,3 +20,5 @@ class DoctorProfile(models.Model):
 
     def __str__(self):
         return f"Dr. {self.user.get_full_name()} - {self.specialization}"
+    class Meta:
+        ordering = ['id', 'specialization'] 
