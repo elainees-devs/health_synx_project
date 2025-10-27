@@ -18,6 +18,9 @@ class Supplier(models.Model):
     email = models.EmailField(blank=True)
     address = models.TextField(blank=True)
 
+    class Meta:
+        ordering = ['id']  # order by supplier id
+
     
     def __str__(self):
         return self.name
@@ -76,7 +79,7 @@ class Medicine(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['name']
+        ordering = ['id','name']
 
     def __str__(self):
         return f"{self.name} ({self.form} - {self.type})"
