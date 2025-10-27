@@ -16,6 +16,9 @@ class LabTest(models.Model):
 
     def __str__(self):
         return self.name
+    class Meta:
+        ordering = ['id', 'name']
+
 
 
 class LabQueue(models.Model):
@@ -33,6 +36,9 @@ class LabQueue(models.Model):
 
     def __str__(self):
         return f"{self.lab_test.name} for {self.patient.get_full_name()}"
+    
+    class Meta:
+        ordering = ['id', 'created_at']
 
 
 # -----------------------------
@@ -45,6 +51,10 @@ class XRay(models.Model):
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        ordering = ['id', 'name']
+
 
 
 class XRayQueue(models.Model):
@@ -62,6 +72,9 @@ class XRayQueue(models.Model):
 
     def __str__(self):
         return f"{self.xray.name} for {self.patient.get_full_name()}"
+    
+    class Meta:
+        ordering = ['id', 'created_at']
 
 
 # -----------------------------
@@ -74,6 +87,9 @@ class MRI(models.Model):
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        ordering = ['id', 'name']
 
 
 class MRIQueue(models.Model):
@@ -91,3 +107,6 @@ class MRIQueue(models.Model):
 
     def __str__(self):
         return f"{self.mri.name} for {self.patient.get_full_name()}"
+    
+    class Meta:
+        ordering = ['id', 'created_at']
