@@ -17,6 +17,7 @@ from patients.serializers import (
     PrescriptionSerializer
 )
 from users.permissions import RolePermission
+from core.pagination import StandardResultsSetPagination
 
 
 class DoctorViewSet(viewsets.ReadOnlyModelViewSet):
@@ -28,6 +29,7 @@ class DoctorViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = DoctorProfile.objects.select_related('user').all().order_by('user__first_name')
     serializer_class = DoctorProfileSerializer
     permission_classes = [IsAuthenticated, RolePermission]
+    pagination_class = StandardResultsSetPagination
 
 
 class DoctorQueueViewSet(viewsets.ModelViewSet):
@@ -37,6 +39,7 @@ class DoctorQueueViewSet(viewsets.ModelViewSet):
     queryset = DoctorQueue.objects.all().select_related('patient', 'doctor').order_by('-created_at')
     serializer_class = DoctorQueueSerializer
     permission_classes = [IsAuthenticated, RolePermission]
+    pagination_class = StandardResultsSetPagination
 
     @action(detail=False, methods=['get'])
     def waiting(self, request):
@@ -76,6 +79,7 @@ class DoctorNoteViewSet(viewsets.ModelViewSet):
     queryset = DoctorNote.objects.all().select_related('patient', 'doctor', 'queue_item')
     serializer_class = DoctorNoteSerializer
     permission_classes = [IsAuthenticated, RolePermission]
+    pagination_class = StandardResultsSetPagination
 
     def perform_create(self, serializer):
         """
@@ -92,6 +96,7 @@ class PrescriptionViewSet(viewsets.ModelViewSet):
     queryset = Prescription.objects.all().select_related('patient', 'doctor')
     serializer_class = PrescriptionSerializer
     permission_classes = [IsAuthenticated, RolePermission]
+    pagination_class = StandardResultsSetPagination
 
     @action(detail=True, methods=['post'])
     def add_items(self, request, pk=None):
