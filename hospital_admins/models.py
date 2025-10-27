@@ -29,3 +29,7 @@ class HospitalAdminProfile(models.Model):
         # Get user's full name
         full_name = f"{self.user.first_name} {self.user.last_name}".strip()
         return f"{full_name} ({self.user.role})"
+    
+    class Meta:
+        ordering = ['id', 'user__first_name']
+
