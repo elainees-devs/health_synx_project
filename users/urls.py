@@ -2,7 +2,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views  
-from .views import register_patient
+from .views import register_patient, UserListView
 
 # DRF router (for future API endpoints like /api/users/)
 router = DefaultRouter()
@@ -21,6 +21,10 @@ urlpatterns = [
     path('nurse/', views.NurseDashboardView.as_view(), name='nurse_dashboard'),
     path('pharmacy/', views.PharmacyDashboardView.as_view(), name='pharmacy_dashboard'),
     path('billing/', views.BillingDashboardView.as_view(), name='billing_dashboard'),
+
+  # Admin-only: get all users
+    path('users/', UserListView.as_view(), name='user-list'),
+
 
     # Optional: include DRF router endpoints
     path('api/', include(router.urls)),
