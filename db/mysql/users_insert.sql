@@ -70,5 +70,5 @@ INSERT INTO users_user
 (password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined, phone_number, role, gender, patient_type, department_id)
 VALUES
 ('bcrypt_sha256\$2b\$12\$QiWL4/hI4KsOtY4h217TFOqZ3czfEQn0JjTzNh8e.0gz3wIsnKqXK'
-, NOW(), 1, 'admin1', 'Admin', 'One', 'admin1@example.com', 1, 1, NOW(), '0700000001', 'admin', 'male', NULL, 5),
+, NOW(), 1, 'admin1', 'Admin', 'One', 'admin1@example.com', 1, 1, NOW(), '0700000001', 'admin', 'male', NULL, 5);
 
