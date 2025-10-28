@@ -223,6 +223,13 @@ See [SECURITY.md](./SECURITY.md) for details.
 
 ---
 
+## 📤 Deployment
+
+* **Deployment:** Backend API hosted with integrated Swagger docs in pythoneverywhere
+* **Documentation** – Accessible at [https://elaines.pythonanywhere.com/swagger/](https://elaines.pythonanywhere.com/swagger/)
+
+* **HTTPS Enforcement:** All production traffic redirected to HTTPS
+
 ## 🔑 Test Credentials (Development Only)
 
 | Username    | Role                | Password       |
@@ -241,17 +248,21 @@ See [SECURITY.md](./SECURITY.md) for details.
 
 ## 🧱 Future Enhancements
 
-* Appointment scheduling notifications
-* Laboratory results integration
-* Pharmacy inventory tracking
-* React or Vue frontend
-* Complete REST API coverage
+Appointment scheduling notifications — notify patients and doctors via email or SMS
+
+Laboratory results integration — allow lab technicians to upload and share test results digitally
+
+Modern frontend with React or Vue — enhance user experience with a dynamic single-page interface
+
+Complete REST API coverage — enable full external system integration and mobile app support
+
+Containerization with Docker — simplify deployment and ensure consistent environments
 
 ---
 
-## License
+## Author
 
-This project is licensed under the [MIT License](LICENSE).
+The project was developed by Elaine Muhombe.
 
 ```
 
